@@ -1,11 +1,20 @@
-﻿using System.IO.Ports;
+﻿#define FULL_COLD_START
+using System.IO.Ports;
 using System.Text;
 using Iot.Device.MT3333;
 
-string VersionValue = "0.3.0-bata";
+string VersionValue = "0.3.1-bata";
 
+#if HOT_START
 string CommandHotStart = "$PMTK101*32\r\n";
-//string CommandWarmStart = "$PMTK102*31\r\n";
+#elif WARM_START
+string CommandWarmStart = "$PMTK102*31\r\n";
+#elif COLD_START
+string CommandColdStart = "$PMTK103*30\r\n";
+#elif FULL_COLD_START
+string CommandFullColdStart = "$PMTK104*37\r\n";
+#endif
+
 //string CommandSetGnssSearchMode = "$PMTK353,1,0,1,0,0*2B\r\n";
 string CommandSetGnssSearchMode = "$PMTK353,1,1,1,0,0*2A\r\n";
 string CommandSetSupportQzss    = "$PMTK351,1*28\r\n";
@@ -52,8 +61,19 @@ try
     gps.SendRequest(CommandSetNmeaOutput);
     Console.WriteLine("Command:SetNmeaOutput");
     Thread.Sleep(1000);
+#if HOT_START
     gps.SendRequest(CommandHotStart);
     Console.WriteLine("Command:CommandHotStart");
+#elif WARM_START
+    gps.SendRequest(CommandWarmStart);
+    Console.WriteLine("Command:CommandWarmStart");
+#elif COLD_START
+    gps.SendRequest(CommandColdStart);
+    Console.WriteLine("Command:CommandColdStart");
+#elif FULL_COLD_START
+    gps.SendRequest(CommandFullColdStart);
+    Console.WriteLine("Command:CommandFullColdStart");
+#endif
 
     Thread.Sleep(1000);
 
