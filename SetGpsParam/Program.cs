@@ -1,9 +1,9 @@
-﻿#define FULL_COLD_START
+﻿#define COLD_START
 using System.IO.Ports;
 using System.Text;
 using Iot.Device.MT3333;
 
-string VersionValue = "0.3.1-bata";
+string VersionValue = "0.4.0-bata";
 
 #if HOT_START
 string CommandHotStart = "$PMTK101*32\r\n";
@@ -52,15 +52,6 @@ try
 
     Thread.Sleep(1000);
 
-    gps.SendRequest(CommandSetGnssSearchMode);
-    Console.WriteLine("Command:SetGnssSearchMode");
-    Thread.Sleep(1000);
-    gps.SendRequest(CommandSetSupportQzss);
-    Console.WriteLine("Command:SetSupportQzss");
-    Thread.Sleep(1000);
-    gps.SendRequest(CommandSetNmeaOutput);
-    Console.WriteLine("Command:SetNmeaOutput");
-    Thread.Sleep(1000);
 #if HOT_START
     gps.SendRequest(CommandHotStart);
     Console.WriteLine("Command:CommandHotStart");
@@ -74,7 +65,16 @@ try
     gps.SendRequest(CommandFullColdStart);
     Console.WriteLine("Command:CommandFullColdStart");
 #endif
+    Thread.Sleep(5000);
 
+    gps.SendRequest(CommandSetGnssSearchMode);
+    Console.WriteLine("Command:SetGnssSearchMode");
+    Thread.Sleep(1000);
+    gps.SendRequest(CommandSetSupportQzss);
+    Console.WriteLine("Command:SetSupportQzss");
+    Thread.Sleep(1000);
+    gps.SendRequest(CommandSetNmeaOutput);
+    Console.WriteLine("Command:SetNmeaOutput");
     Thread.Sleep(1000);
 
 }
